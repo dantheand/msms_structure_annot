@@ -1,0 +1,22 @@
+name: msms_structure_annot-env  ## conda environment name
+channels:      ## Add any other channels below if necessary
+- conda-forge
+dependencies:  ## Prioritize conda packages
+- python=3.8
+- jupyter
+- conda
+- ipython
+- ipykernel
+- numpy
+- matplotlib
+- seaborn
+- scipy
+- pandas
+- pyprojroot
+
+## TODO #3 Decide if i need to include mkdocs
+##- pip:  ## Add in pip packages if necessary
+##  - mkdocs
+##  - mkdocs-material
+##  - mkdocstrings
+# # - mknotebooks
