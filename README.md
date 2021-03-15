@@ -30,7 +30,21 @@ This will create the conda environment `msms_structure_annot-env` with all the r
 conda activate msms_structure_annot-env
 ```
 
+## How to use it
 
-## Example
+- how to use this code
+- also expanded Jupyter notebook explaining what each step of the process does
 
-Example of using the code.
+### Basics
+
+- name msms files as `ms[0-9].csv` and put them into a folder in `/data`
+
+### Example use
+
+- structural annotation example
+
+## Todo
+
+- Create expanded example notebook
+- create standard example notebook
+- All the things that need to be done in the script

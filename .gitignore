@@ -1,8 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
-# Data folder
-data/
+# Data folder (you should add this back in if you're using this package on your own
+# data/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
