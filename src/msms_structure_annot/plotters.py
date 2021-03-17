@@ -6,15 +6,17 @@ Useful plotting functions are here.
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-import matplotlib
+import matplotlib as mpl
 import pandas as pd
+
+# Set the display DPI to be higher
+mpl.rcParams['figure.dpi']=150
 
 # Private method to label points
 def _label_point(x, y, val, ax):
-    
     a = pd.concat({'x': x, 'y': y, 'val': val}, axis=1)
     for _, point in a.iterrows():
-        ax.text(point['x'], point['y'], str(point['val']))
+        ax.text(point['x']+10, point['y'], str(point['val'])) # Add label offset here if you like
 
 
 def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
@@ -73,8 +75,9 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
             val = sub_matched_df['ion_name'], ax = ax)
 
         # Format the plot
+        ax.set_yscale('log')
         ax.set_xlim(0, 2000)
-        ax.set_ylim(0, 500)
+        ax.set_ylim(1e1, 1e4)
         ax.set_xlabel( "m/z", size = 10)
         ax.set_ylabel( "Abundance", size = 10)
 
