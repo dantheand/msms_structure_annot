@@ -1,0 +1,14 @@
+python==3.8
+jupyter
+conda
+ipython
+ipykernel
+numpy
+matplotlib
+seaborn
+scipy
+pandas
+pyprojroot
+openpyxls
+nbformat
+nbconvert
