@@ -9,8 +9,11 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
 
-# Set the display DPI to be higher
+# Set matplotlib parameters
 mpl.rcParams['figure.dpi']=150
+mpl.rcParams['pdf.fonttype'] = 42 # For manipulatable fonts in pdfs
+mpl.rcParams['savefig.bbox'] = 'tight'
+mpl.rcParams['savefig.transparent'] = True
 
 # Private method to label points
 def _label_point(x, y, val, ax):
@@ -38,9 +41,9 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
 
     Returns
     -----------
-    fig : matplotlib.figure.Figure
+    matplotlib.figure.Figure
         The whole figure that is plotted.
-    axs: np.array
+    np.array
         Array of axes being plotted.
     """
     # Make the plot

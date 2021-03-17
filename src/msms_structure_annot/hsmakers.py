@@ -177,7 +177,7 @@ def frag_hs(hs_df, ptms_df, parent_seq, N_term_mod, C_term_mod):
 
     # Iterate through each hypothetical sequence and specify the mass
     for hs_id in hs_df['hs_id'].unique():
-        
+
         # Pull PTM locations from hs_df
         hs_sub_df = hs_df[hs_df['hs_id'] == hs_id]
         
@@ -195,7 +195,7 @@ def frag_hs(hs_df, ptms_df, parent_seq, N_term_mod, C_term_mod):
             
             frag_df = frag_df.append(new_row, ignore_index=True)
         
-        return frag_df
+    return frag_df
 
 
 def _add_charge(frag_df,charge_N, proton_m):
@@ -261,4 +261,3 @@ def mk_charge_df(frag_df, charges, proton_m):
         ].apply((lambda x: x[:2] + x[3:]))
 
     return frag_df_charged
-
