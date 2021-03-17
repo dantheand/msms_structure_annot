@@ -8,6 +8,6 @@ seaborn
 scipy
 pandas
 pyprojroot
-openpyxls
+openpyxl
 nbformat
 nbconvert
