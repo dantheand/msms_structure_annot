@@ -1,7 +1,6 @@
 name: msms_structure_annot-env  ## conda environment name
 channels:      ## Add any other channels below if necessary
 - conda-forge
-## TODO: #5 specific versions to environment depedencies
 dependencies:  
 - python=3.8
 - jupyter
@@ -14,7 +13,9 @@ dependencies:
 - scipy
 - pandas
 - pyprojroot
-- openpyxl
+- openpyxls
+- nbformat
+- nbconvert
 
 ## TODO #3 Decide if i need to include mkdocs
 ##- pip:  ## Add in pip packages if necessary
