@@ -5,6 +5,7 @@ All the mass-spec processing code is here
 """
 import pandas as pd
 import re
+import numpy as np
 
 def import_ms_files(ms_files_dir):
     """MS file importer
@@ -41,4 +42,68 @@ def import_ms_files(ms_files_dir):
         new_ms['spec_num'] = spec_num
         ms_df = ms_df.append(new_ms, ignore_index = True)
     
-    return(ms_df)
+    return ms_df
+
+# Change abundances such that they cap out at a given abundance value
+def abund_ceiling(abundances, upper_lim):
+    """Set an abundance ceiling value
+
+    Parameters
+    ----------
+    abundances : pd.Series
+        Mass abundance values
+    upper_lim : float
+        Multiplier of the mean abundance value to set the ceiling at.
+
+    Returns
+    -------
+    abundances : pd.Series
+        Abundances with ceiling applied.
+    """
+    
+    # First set all ions above a certain threshold to a single value
+    max_val = upper_lim * np.mean(abundances)
+    abundances.mask(abundances > max_val, max_val, inplace = True)
+    
+    return abundances
+
+def bkgd_calc_ser(abundances, N):
+    """Background abundance value calculator.
+
+    Sections off the m/z axis into N different sections.
+    Calculates the "background" value (threshold to be used for signal) 
+    from the average of a given section and its two neighboring sections.
+
+    Parameters
+    ----------
+    abundances : pd.Series
+        Ceilinged abundances.
+    N : int
+        Number of sections to split into when calculating background.
+
+    Returns
+    -------
+    bkgd
+        Background value for each abundance point.
+    """
+
+    # Split indices into sections
+    sections = np.array_split(abundances.index.values, N)
+
+    bkgd = pd.Series(data = None, index = abundances.index.values, dtype = 'float64')
+
+    # Iterate through each section and calculate background noise value based on algorithm above
+    #   Edge cases are required fro the first and last sections
+    for i in range(len(sections)):
+        # Get indices of appropriate m/z signals for each section's calculation
+        if i == 0: # If it's the first section, dont use the previous section in the calculation
+            idxs = np.concatenate((sections[i],sections[i+1]))
+        elif i == (len(sections)-1): # If its the last section... don't use the following section
+            idxs = np.concatenate((sections[i-1],sections[i]))
+        else: # Otherwise calculate background signal based on previous section, current section, and following section
+            idxs = np.concatenate((sections[i-1],sections[i],sections[i+1]))
+        
+        bkgd_sig = np.mean(abundances.loc[idxs]) # take the mean of the abundance values in the given window
+        bkgd.loc[sections[i]] = bkgd_sig
+
+    return bkgd
