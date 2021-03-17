@@ -4,6 +4,9 @@
 # Data folder (you should add this back in if you're using this package on your own
 # data/
 
+# Reports folder
+reports/
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
