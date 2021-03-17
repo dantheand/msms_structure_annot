@@ -80,7 +80,7 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
         # Format the plot
         ax.set_yscale('log')
         ax.set_xlim(0, 2000)
-        ax.set_ylim(1e1, 1e4)
+        ax.set_ylim(1e1, 1e5)
         ax.set_xlabel( "m/z", size = 10)
         ax.set_ylabel( "Abundance", size = 10)
 
