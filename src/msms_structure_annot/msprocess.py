@@ -35,7 +35,7 @@ def import_ms_files(ms_files_dir):
     ms_df = pd.DataFrame(columns = ['m/z', 'orig_abundance', 'spec_num'])
 
     for ms_file in ms_files:
-        spec_num = int(re.search('ms[\d+].', str(ms_file))[0][2:-1]) # extract the number in the ms file
+        spec_num = int(re.search(r'ms[\d+].', str(ms_file))[0][2:-1]) # extract the number in the ms file
         # Import the csv file (tab separated works too)
         new_ms = pd.read_csv(ms_file, skiprows = [0,1], delimiter = '\t', header = 0, 
             names = ['m/z','orig_abundance'], index_col = False)
