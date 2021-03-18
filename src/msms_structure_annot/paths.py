@@ -12,8 +12,8 @@ Append new directories and use them like:
 
 from pyprojroot import here
 
-# Path names
-root = here(project_files=[".git"])
+# Get root directory by looking for the environment file
+root = here(project_files=["environment.yml"])
 
 notebooks_dir = root / "notebooks"
 script_dir = root / "scripts"
