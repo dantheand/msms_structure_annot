@@ -4,7 +4,13 @@
 
 ## Overview
 
-This package allows you to propose structures for modified peptides with unknown modification patterns using their MS/MS spectra. It also allows you to annotate the MS/MS spectra of modified peptides with these hypothetical structures. The package generates multiple possible hypothetical structures, computationally fragments them, and then aligns those hypothetical fragments to the observed ions in the MS/MS data to give a best estimate as to where the modifications are taking place on the peptide.
+This package allows you to propose structures for modified peptides with unknown modification patterns using their MS/MS spectra. 
+
+Basic features:
+- MS/MS spectra cleanup
+- Computational generation of modified peptides "hypothetical structures" and their fragmentation patterns
+- Matching of observed masses with computationally-generated spectra
+- Likelihood scoring of hypothetical structures given experimental MS/MS spectra
 
 This package was primarily coded to support the work presented here:
 *\<cite papers when they come out\>*
