@@ -7,6 +7,7 @@
 This package allows you to propose structures for modified peptides with unknown modification patterns using their MS/MS spectra. 
 
 Basic features:
+
 - MS/MS spectra cleanup
 - Computational generation of modified peptides "hypothetical structures" and their fragmentation patterns
 - Matching of observed masses with computationally-generated spectra
@@ -50,17 +51,26 @@ Navigate to the project root directory and run this code in an Anaconda terminal
 
 ```shell
 conda env create -f ./environment.yml msms_structure_annot-env
+conda activate msms_structure_annot-env
 pip install -e ./src
 ```
 
 This will create the conda environment `msms_structure_annot-env` with all the required dependencies. It also installs the custom package in "editable mode".
 
-### Later uses
-
-After this initial install, you only need to activate the environment before using this package:
+Then open a Jupyter server in the `msms_structure_annot-env` environment and give it a go:
 
 ```shell
 conda activate msms_structure_annot-env
+jupyter notebook
+```
+
+### Later uses
+
+After this initial install, you only need to activate the environment before opening a Jupyter server:
+
+```shell
+conda activate msms_structure_annot-env
+jupyter notebook
 ```
 
 ### Troubleshooting
