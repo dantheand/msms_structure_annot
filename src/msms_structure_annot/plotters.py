@@ -8,6 +8,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
+import numpy as np
 
 # Set matplotlib parameters
 mpl.rcParams['figure.dpi']=150
@@ -17,14 +18,18 @@ mpl.rcParams['savefig.transparent'] = True
 
 # Private method to label points
 def _label_point(x, y, val, ax):
+    # Should probably make this take arrays instead of series
     a = pd.concat({'x': x, 'y': y, 'val': val}, axis=1)
     for _, point in a.iterrows():
-        ax.text(point['x']+10, point['y'], str(point['val'])) # Add label offset here if you like
+        ax.text(point['x'], point['y'], str(point['val'])) # Add label offset here if you like
 
 
-def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
-    """Vertical line plotting function for mass spec data. Plots
-    a vertical line at each m/z value with the height according to the abundance.
+def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)], ylims= [(0,1e5)],
+                        auto_yscale = True):
+    """Vertical line plotting function for mass spec data. 
+    
+    Plots a vertical line at each m/z value with the height according to the abundance. Also
+    plots the matched hypothetical ions.
 
     Parameters
     ----------
@@ -38,6 +43,12 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
     hs_id : int
         Hypothetical structure ID to plot ions for (should correspond to a value in
         the matched_df 'hs_id' column).
+    xlims : list
+        List of x limits to use for each plot. Only specify one if you want it globally applied.
+    ylims : list
+        List of y limits to use for each plot. Only specify one if you want it globally applied.
+    auto_yscale : bool
+        Boolean to decide whether or not to autoscale the y axis.
 
     Returns
     -----------
@@ -47,10 +58,27 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
         Array of axes being plotted.
     """
     # Make the plot
-    fig, axs = plt.subplots(nrows = len(ms_file_nums), figsize = (8,len(ms_file_nums)*4))
+    N_plots = len(ms_file_nums)
+    fig, axs = plt.subplots(nrows = N_plots, figsize = (8,N_plots*4))
+
+    # Make xlim / ylim arrays
+    xlims_processed = []
+    ylims_processed = []
+    if len(xlims) == 1: # If only a single limit is provided, apply limits across all plots
+        xlims_processed = xlims * N_plots
+    else:
+        assert len(xlims) == N_plots, "Number of x-axes limits specified must match number of spectra! (or be 1)"
+        xlims_processed = xlims
+
+    if len(ylims) == 1: # If only a single limit is provided, apply limits across all plots
+        ylims_processed = ylims * N_plots
+    else:
+        assert len(xlims) == N_plots, "Number of y-axes limits specified must match number of spectra! (or be 1)"
+        ylims_processed = ylims
+
 
     # Iterate through each spectrum and plot and label
-    for ms_file, ax in zip(ms_file_nums,axs):
+    for ms_file, ax, xlim, ylim in zip(ms_file_nums, axs, xlims_processed, ylims_processed):
         # Get the observed masses / abundances for a single spectrum
         sub_df = ms_df[ms_df['spec_num'] == ms_file]
 
@@ -62,25 +90,39 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id):
         abunds = sub_df['orig_abundance'].values # Using original abundances here (could use ceilings too)
         ax.vlines(x = mz_vals, ymin = 0, ymax=abunds, linewidth = 1, color = 'k')
 
-        # Plot the masses that match the hypothetical structure and color it by b/y/p ion
-        
-        mz_vals = sub_matched_df['m/z'].values
-        abunds = sub_matched_df['orig_abundance'].values
-        # Add color generation code here
-
-        # Plot vertical lines
-        ax.vlines(x = mz_vals, ymin = 0, ymax=abunds, linewidth = 1)
-        # Plot some dots on top too
-        ax.scatter(x = mz_vals, y=abunds, s = 5)
+        # Define axes limits
+        # Scale y value to the largest abundance value if autoscale is true
+        if auto_yscale:
+            upper_y_lim = 1.25*np.amax(abunds)
+        else:
+            upper_y_lim = ylim[1]
 
         # Label each point
-        _label_point(x = sub_matched_df['m/z'], y = sub_matched_df['orig_abundance'], 
-            val = sub_matched_df['ion_name'], ax = ax)
+        # Truncate labels to only include labels inside the axes limits
+        trunc_labels_df = sub_matched_df[
+            (sub_matched_df['m/z'] > xlim[0]) & (sub_matched_df['m/z'] < xlim[1]) & 
+            (sub_matched_df['orig_abundance'] > ylim[0]) & 
+            (sub_matched_df['orig_abundance'] < ylim[1]) 
+        ]
+        # Plot and label hypothetical masses (if they exist in the axes ranges)
+        if not trunc_labels_df.empty:
+            mz_vals = trunc_labels_df['m/z'].values
+            abunds = trunc_labels_df['orig_abundance'].values
+            # Add color generation code here
 
-        # Format the plot
-        ax.set_yscale('log')
-        ax.set_xlim(0, 2000)
-        ax.set_ylim(1e1, 1e5)
+            # Plot vertical lines
+            ax.vlines(x = mz_vals, ymin = 0, ymax=abunds, linewidth = 1)
+            # Plot some dots on top too
+            ax.scatter(x = mz_vals, y=abunds, s = 5)
+            _label_point(x = trunc_labels_df['m/z'], y = trunc_labels_df['orig_abundance'], 
+                val = trunc_labels_df['ion_name'], ax = ax)
+
+        
+        # Format plot
+        ax.set_xlim(xlim[0], xlim[1])
+        ax.set_ylim(ylim[0], upper_y_lim)
+
+
         ax.set_xlabel( "m/z", size = 10)
         ax.set_ylabel( "Abundance", size = 10)
 
