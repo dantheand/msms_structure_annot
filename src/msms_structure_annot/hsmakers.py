@@ -115,7 +115,7 @@ def _get_mass_seq(trunc_seq, hs_sub_df, ptms_df, trunc_type, parent_seq, N_term_
         
     elif trunc_type == 'N':
         #included_ptms = [x for x in ptm_locs if x > (len(parent_seq) - ion_len)]
-        ptm_range = ((len(parent_seq) - ion_len),ion_len)
+        ptm_range = ((len(parent_seq) - ion_len),len(parent_seq))
         
         if ion_len == len(parent_seq): # This is the parent ion
             
