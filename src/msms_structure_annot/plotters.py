@@ -73,7 +73,7 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
     if len(ylims) == 1: # If only a single limit is provided, apply limits across all plots
         ylims_processed = ylims * N_plots
     else:
-        assert len(xlims) == N_plots, "Number of y-axes limits specified must match number of spectra! (or be 1)"
+        assert len(ylims) == N_plots, "Number of y-axes limits specified must match number of spectra! (or be 1)"
         ylims_processed = ylims
 
 
