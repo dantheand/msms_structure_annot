@@ -108,14 +108,14 @@ def _get_mass_seq(trunc_seq, hs_sub_df, ptms_df, trunc_type, parent_seq, N_term_
         term_mod = N_term_mod
         
         #included_ptms = [x for x in ptm_locs if x <= ion_len] # get mod sites included in the truncation
-        ptm_range = (1,ion_len)
+        ptm_range = (0,ion_len)
         ion_type = 'b'
         ion_name = ion_type + str(ion_len)
         #print(trunc_seq, ' bion length:',len(trunc_seq), '; ptms: ', str(included_ptms))
         
     elif trunc_type == 'N':
         #included_ptms = [x for x in ptm_locs if x > (len(parent_seq) - ion_len)]
-        ptm_range = ((len(parent_seq) - ion_len),len(parent_seq))
+        ptm_range = ((len(parent_seq) - ion_len +1),len(parent_seq))
         
         if ion_len == len(parent_seq): # This is the parent ion
             
@@ -139,7 +139,7 @@ def _get_mass_seq(trunc_seq, hs_sub_df, ptms_df, trunc_type, parent_seq, N_term_
         ptm_shift = ptms_df[ptms_df['ptm_id'] == ptm_id]['m_shift'].values[0]
         # count the numbers of PTM in the fragment
         ptm_locs = hs_sub_df[hs_sub_df['ptm_id'] == ptm_id]['ptm_locs'].values[0]
-        num_included_ptms = len([x for x in ptm_locs if (x > ptm_range[0] and x <= ptm_range[1])])
+        num_included_ptms = len([x for x in ptm_locs if (x >= ptm_range[0] and x <= ptm_range[1])])
         # Shift mass by number of PTMs and the according mass shift
         mass = mass + ptm_shift*num_included_ptms
 
