@@ -182,6 +182,7 @@ After choosing one hypothetical structure, you can map the hypothetical ions (bl
 ## Future features that would be helpful
 
 - Expand the fragmentation code to work for ring structures.
+- Include isotopic peaks (currently only does monoisotopic masses, which isn't the most prevalent in large fragments)
 
 ## Acknowledgements
 
