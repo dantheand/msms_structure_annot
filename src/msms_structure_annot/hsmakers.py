@@ -4,9 +4,11 @@ Generate hypothetical structures from proposed PTMs. Also fragments and
 assigns hypothetical masses.
 
 """
-
+import warnings
 import itertools
+from numpy import histogram_bin_edges
 import pandas as pd
+import numpy as np
 
 # Define molecular weights for polymerized amino acids
 aa_mws = pd.DataFrame({
@@ -42,8 +44,15 @@ def gen_hss(ptms_df):
 
     for i in range(0,ptms_df.shape[0]):
         ptm_id = ptms_df.loc[i]['ptm_id']
-        mod_poss = ptms_df.loc[i]['poss_mod_pos']
-        mod_count = ptms_df.loc[i]['num_mods']
+        mod_poss = ptms_df.loc[i]['poss_mod_pos'] # possitible modification positions
+        mod_count = ptms_df.loc[i]['num_mods'] # Total number of modifications
+
+        # Make sure the number of mod sites is less than or equal to number of mods
+        if mod_count > len(mod_poss):
+            raise ValueError(
+                'Total number of modifications for PTM id {} is larger than the number of possible locations!'
+                .format(ptm_id)
+                )
 
         # Get all combinations of possible modified positions and store in dictionary
         all_mod_combs.append([comb for comb in itertools.combinations(mod_poss, mod_count)])
@@ -180,6 +189,14 @@ def frag_hs(hs_df, ptms_df, parent_seq, N_term_mod, C_term_mod):
 
         # Pull PTM locations from hs_df
         hs_sub_df = hs_df[hs_df['hs_id'] == hs_id]
+
+        # Throw a warning if PTMs are specified outside the bounds of the parent peptide sequence
+        max_ptm_loc = np.max(hs_sub_df['ptm_locs'].values[0])
+        if max_ptm_loc > len(parent_seq):
+            warnings.warn(
+                'PTM location of {} is larger than the length of the parent peptide in HS id {}'
+                .format(max_ptm_loc, hs_id)
+            )
         
         # Truncate from the C-term
         for i in range(1,len(parent_seq)):
