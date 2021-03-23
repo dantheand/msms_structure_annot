@@ -3,7 +3,7 @@
 
 import pytest
 import pandas as pd
-from msms_structure_annot.hsmakers import *
+from msms_structure_annot.hsmakers import frag_hs, mk_charge_df
 from msms_structure_annot.paths import test_data_dir
 
 # Import the pickled dataframes with example test data to compare against
