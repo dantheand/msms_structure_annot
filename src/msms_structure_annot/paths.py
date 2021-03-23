@@ -19,3 +19,4 @@ notebooks_dir = root / "notebooks"
 script_dir = root / "scripts"
 data_dir = root / "data"
 reports_dir = root / "reports"  # Output directory for reports
+test_data_dir = root / "src" / "tests" / "tests_data" # Directory where example data is stored for tests
