@@ -16,6 +16,7 @@ dependencies:
 - openpyxl
 - nbformat
 - nbconvert
+- pytest
 
 ## TODO #3 Decide if i need to include mkdocs
 ##- pip:  ## Add in pip packages if necessary
