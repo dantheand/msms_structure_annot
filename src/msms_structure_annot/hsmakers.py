@@ -152,9 +152,10 @@ def _get_mass_seq(trunc_seq, hs_sub_df, ptms_df, trunc_type, parent_seq, N_term_
         # Shift mass by number of PTMs and the according mass shift
         mass = mass + ptm_shift*num_included_ptms
 
-    #print(mass)
-
-    hyp_ion_row = {'hs_id': hs_id, 'seq': trunc_seq, 'hyp_mw': mass, 'ion_name': ion_name, 'b_y_p': ion_type}
+    hyp_ion_row = {
+        'hs_id': hs_id, 'seq': trunc_seq, 'hyp_mw': mass, 'ion_name': ion_name, 
+        'human_name': ion_name, 'b_y_p': ion_type
+    }
     
     return hyp_ion_row
 
@@ -181,7 +182,7 @@ def frag_hs(hs_df, ptms_df, parent_seq, N_term_mod, C_term_mod):
         Dataframe with all the fragmented hypothetical fragmented ions and masses.
     """
 
-    columns = ['hs_id', 'seq', 'hyp_mw', 'ion_name', 'b_y_p']
+    columns = ['hs_id', 'seq', 'hyp_mw', 'ion_name', 'human_name', 'b_y_p']
     frag_df = pd.DataFrame(columns= columns)
 
     # Iterate through each hypothetical sequence and specify the mass
@@ -200,7 +201,7 @@ def frag_hs(hs_df, ptms_df, parent_seq, N_term_mod, C_term_mod):
         
         # Truncate from the C-term
         for i in range(1,len(parent_seq)):
-            trunc_seq = parent_seq[:i]        
+            trunc_seq = parent_seq[:i]
             new_row = _get_mass_seq(trunc_seq, hs_sub_df, ptms_df, 'C', parent_seq, N_term_mod, C_term_mod)
             
             frag_df = frag_df.append(new_row, ignore_index=True)
@@ -236,6 +237,7 @@ def _add_charge(frag_df,charge_N, proton_m):
     charge_df = frag_df.copy()
     charge_df['charge'] = charge_N
     charge_df['hyp_mw'] = (charge_df['hyp_mw'] + charge_N*proton_m) / charge_N
+    charge_df['human_name'] = charge_df['human_name'] + '+' + str(charge_N)
     charge_df['ion_name'] = charge_df['ion_name'] + '^' + '{+'+ str(charge_N)+'}'
 
     return charge_df
