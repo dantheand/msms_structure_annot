@@ -25,7 +25,7 @@ def _label_point(x, y, val, ax):
 
 
 def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)], ylims= [(0,1e5)],
-                        auto_yscale = True):
+                        auto_yscale = True, annot_sn_lim = 0):
     """Vertical line plotting function for mass spec data. 
     
     Plots a vertical line at each m/z value with the height according to the abundance. Also
@@ -49,6 +49,8 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
         List of y limits to use for each plot. Only specify one if you want it globally applied.
     auto_yscale : bool
         Boolean to decide whether or not to autoscale the y axis.
+    annot_sn_lim : float
+        Signal to noise limit to exclude annotations below.
 
     Returns
     -----------
@@ -59,7 +61,12 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
     """
     # Make the plot
     N_plots = len(ms_file_nums)
+    
     fig, axs = plt.subplots(nrows = N_plots, figsize = (8,N_plots*4))
+
+    # If there's only one plot, make the axes object an iterable so it can be parsed below
+    if N_plots == 1:
+        axs = [axs]
 
     # Make xlim / ylim arrays
     xlims_processed = []
@@ -98,11 +105,14 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
             upper_y_lim = ylim[1]
 
         # Label each point
+
         # Truncate labels to only include labels inside the axes limits
+        # Also remove labels where abundance is below s/n threshold
         trunc_labels_df = sub_matched_df[
             (sub_matched_df['m/z'] > xlim[0]) & (sub_matched_df['m/z'] < xlim[1]) & 
             (sub_matched_df['orig_abundance'] > ylim[0]) & 
-            (sub_matched_df['orig_abundance'] < ylim[1]) 
+            (sub_matched_df['orig_abundance'] < ylim[1]) &
+            (sub_matched_df['orig_abundance'] > annot_sn_lim)
         ]
         # Plot and label hypothetical masses (if they exist in the axes ranges)
         if not trunc_labels_df.empty:
