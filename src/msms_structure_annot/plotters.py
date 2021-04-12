@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
 import numpy as np
+from adjustText import adjust_text
 
 # Set matplotlib parameters
 mpl.rcParams['figure.dpi']=150
@@ -20,8 +21,12 @@ mpl.rcParams['savefig.transparent'] = True
 def _label_point(x, y, val, ax):
     # Should probably make this take arrays instead of series
     a = pd.concat({'x': x, 'y': y, 'val': val}, axis=1)
+    # Store annotations to be used by "adjust_text"
+    annots = []
     for _, point in a.iterrows():
-        ax.text(point['x'], point['y'], str(point['val'])) # Add label offset here if you like
+        annot = ax.text(point['x'], point['y'], str(point['val'])) # Add label offset here if you like
+        annots.append(annot)
+    adjust_text(annots)
 
 
 def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)], ylims= [(0,1e5)],
@@ -104,6 +109,12 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
         else:
             upper_y_lim = ylim[1]
 
+        # Format plot
+        ax.set_xlim(xlim[0], xlim[1])
+        ax.set_ylim(ylim[0], upper_y_lim)
+        ax.set_xlabel( "m/z", size = 10)
+        ax.set_ylabel( "Abundance", size = 10)
+
         # Label each point
 
         # Truncate labels to only include labels inside the axes limits
@@ -124,16 +135,11 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
             ax.vlines(x = mz_vals, ymin = 0, ymax=abunds, linewidth = 1)
             # Plot some dots on top too
             ax.scatter(x = mz_vals, y=abunds, s = 5)
+            # Label all the points
             _label_point(x = trunc_labels_df['m/z'], y = trunc_labels_df['orig_abundance'], 
                 val = trunc_labels_df['ion_name'], ax = ax)
 
         
-        # Format plot
-        ax.set_xlim(xlim[0], xlim[1])
-        ax.set_ylim(ylim[0], upper_y_lim)
-
-
-        ax.set_xlabel( "m/z", size = 10)
-        ax.set_ylabel( "Abundance", size = 10)
+        
 
     return(fig, axs)

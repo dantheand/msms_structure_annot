@@ -17,6 +17,7 @@ dependencies:
 - nbformat
 - nbconvert
 - pytest
+- adjusttext
 
 ## TODO #3 Decide if i need to include mkdocs
 ##- pip:  ## Add in pip packages if necessary
