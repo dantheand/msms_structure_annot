@@ -187,3 +187,5 @@ After choosing one hypothetical structure, you can map the hypothetical ions (bl
 ## Acknowledgements
 
 This work heavily leans on the methods proposed and developed by the van der Donk group here: [10.1073/pnas.1406418111](https://doi.org/10.1073/pnas.1406418111)
+
+The adjustText Python package was use to ease annotation (https://github.com/Phlya/adjustText) doi: [10.5281/zenodo.3924114](https://zenodo.org/badge/latestdoi/49349828)
