@@ -103,7 +103,7 @@ def bkgd_calc_ser(abundances, N):
         else: # Otherwise calculate background signal based on previous section, current section, and following section
             idxs = np.concatenate((sections[i-1],sections[i],sections[i+1]))
         
-        bkgd_sig = np.mean(abundances.loc[idxs]) # take the mean of the abundance values in the given window
+        bkgd_sig = np.median(abundances.loc[idxs]) # take the mean of the abundance values in the given window
         bkgd.loc[sections[i]] = bkgd_sig
 
     return bkgd
