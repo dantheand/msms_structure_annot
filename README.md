@@ -41,7 +41,7 @@ The proposed workflow is meant to balance reproducibility while still allowing t
 
 ### Binder image
 
-If you just want to take a quick peek at the code, use a Binder instance to interactively explore the example Jupyter notebooks in `/notebooks`. ([binder link](https://mybinder.org/v2/gh/dantheand/msms_structure_annot/2c3342c374ff8129687ca0300d3b27541448a8ec))
+If you just want to take a quick peek at the functionality, use a Binder instance to interactively explore the example Jupyter notebooks in `/notebooks`. I recommend HalA2. ([binder link](https://mybinder.org/v2/gh/dantheand/msms_structure_annot/2c3342c374ff8129687ca0300d3b27541448a8ec))
 
 ### First-time use: install conda environment and package
 
