@@ -30,7 +30,7 @@ This package was primarily coded to support the work presented here:
 The proposed workflow is meant to balance reproducibility while still allowing the tinkering required for MS/MS data:
 
 - Put all MS/MS data pertaining to a given experiment into a folder in `/data/<exp_name>`
-- Copy a `msms_match_template.ipynb` template notebook from `/notebooks/templates` into `/notebooks` and rename it something useful like `<exp_name>.ipynb`
+- Copy a `HalA2_example.ipynb` template notebook from `/notebooks` and rename it something useful like `<exp_name>.ipynb`
 - Provide parameters for analysis in the new notebook
 - Run the notebook and export a report into a folder in `/reports/<exp_name>/reports001/`
 - If you want to try different parameters / variations on the same experiment, use the same `<exp_name>.ipynb` notebook, but increment the reports number to output to a different location
