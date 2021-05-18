@@ -18,19 +18,20 @@ mpl.rcParams['savefig.bbox'] = 'tight'
 mpl.rcParams['savefig.transparent'] = True
 
 # Private method to label points
-def _label_point(x, y, val, ax):
+def _label_point(x, y, val, label_size, ax):
     # Should probably make this take arrays instead of series
     a = pd.concat({'x': x, 'y': y, 'val': val}, axis=1)
     # Store annotations to be used by "adjust_text"
     annots = []
     for _, point in a.iterrows():
-        annot = ax.text(point['x'], point['y'], str(point['val'])) # Add label offset here if you like
+        annot = ax.text(point['x'], point['y'], str(point['val']),
+                fontsize = label_size) # Add label offset here if you like
         annots.append(annot)
     adjust_text(annots)
 
 
 def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)], ylims= [(0,1e5)],
-                        auto_yscale = True, annot_sn_lim = 0):
+                        auto_yscale = True, annot_sn_lim = 0, label_size = 10):
     """Vertical line plotting function for mass spec data. 
     
     Plots a vertical line at each m/z value with the height according to the abundance. Also
@@ -56,6 +57,8 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
         Boolean to decide whether or not to autoscale the y axis.
     annot_sn_lim : float
         Signal to noise limit to exclude annotations below.
+    label_size : float
+        Size of annotation labels.
 
     Returns
     -----------
@@ -137,7 +140,7 @@ def label_spectra_plot(ms_df, matched_df, ms_file_nums, hs_id, xlims = [(0,2000)
             ax.scatter(x = mz_vals, y=abunds, s = 5)
             # Label all the points
             _label_point(x = trunc_labels_df['m/z'], y = trunc_labels_df['orig_abundance'], 
-                val = trunc_labels_df['ion_name'], ax = ax)
+                val = trunc_labels_df['ion_name'], label_size = label_size, ax = ax)
 
         
         
