@@ -14,7 +14,10 @@ Basic features:
 - Likelihood scoring of hypothetical structures given experimental MS/MS spectra
 
 This package was primarily coded to support the work presented here:
-*\<cite papers when they come out\>*
+
+Glassey, E., King, A.M., Anderson, D.A., Zhang, Z., & Voigt, C.A. (2022).
+**Functional expression of diverse post-translational peptide-modifying enzymes in Escherichia coli under uniform expression and purification conditions.**
+PLOS ONE https://doi.org/10.1371/journal.pone.0266488
 
 ## Using this project
 
